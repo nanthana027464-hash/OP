@@ -1,0 +1,65 @@
+-- โหลด Rayfield UI Library
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- บริการพื้นฐาน Roblox
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- ตัวแปรควบคุม Toggle
+local hackLuck = false
+
+-- สร้าง Window
+local Window = Rayfield:CreateWindow({
+   Name = "Anime Dice - Hack Luck",
+   LoadingTitle = "Loading Script...",
+   LoadingSubtitle = "by Assistant",
+   ConfigurationSaving = {
+      Enabled = false,
+   },
+   Discord = {
+      Enabled = false,
+   },
+   KeySystem = false
+})
+
+-- สร้าง Tab หลัก
+local MainTab = Window:CreateTab("Luck Features", 4483362458)
+
+-- สร้าง Toggle เปิด-ปิด Hack Luck x1.9Qi
+local Toggle = MainTab:CreateToggle({
+   Name = "Enable Hack Luck x1.9Qi",
+   CurrentValue = false,
+   Flag = "HackLuckAnimeDice",
+   Callback = function(Value)
+      hackLuck = Value
+      
+      if hackLuck then
+         Rayfield:Notify({
+            Title = "Hack Luck Activated",
+            Content = "เริ่มส่ง Remote Luck x1.9Qi ไปยัง Server...",
+            Duration = 3,
+            Image = 4483362458,
+         })
+         
+         task.spawn(function()
+            while hackLuck do
+               pcall(function()
+                  -- ค้นหา Remote Event ของแมพ Anime Dice (RGX -> RIO)
+                  local remote = ReplicatedStorage:WaitForChild("RGX", 2):WaitForChild("RIO", 2)
+                  
+                  if remote then
+                     -- โครงสร้าง Remote Argument สำหรับ Luck x1.9Qi
+                     local args = {
+                        "luck x1.9qi",
+                        1.9e18
+                     }
+                     remote:FireServer(unpack(args))
+                  end
+               end)
+               
+               -- หน่วงเวลา 1 วินาที เพื่อป้องกันการถูก Server Reject หรือ Kick Out
+               task.wait(1)
+            end
+         end)
+      end
+   end,
+})
